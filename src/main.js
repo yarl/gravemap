@@ -1,15 +1,30 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
+import Router from 'vue-router';
+import Vue2Leaflet from 'vue2-leaflet';
+import Buefy from 'buefy';
+
+import Home from '@/views/Home';
+import Map from '@/views/Map';
 import App from './App';
-import router from './router';
 
 Vue.config.productionTip = false;
+
+Vue.use(Buefy);
+Vue.use(Router);
+
+Vue.component('v-map', Vue2Leaflet.Map);
+Vue.component('v-tilelayer', Vue2Leaflet.TileLayer);
+Vue.component('v-marker', Vue2Leaflet.Marker);
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
+  router: new Router({
+    routes: [
+      { path: '/', name: 'Map', component: Map },
+      { path: '/home', name: 'Home', component: Home },
+    ],
+  }),
   template: '<App/>',
   components: { App },
 });

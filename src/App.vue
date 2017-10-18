@@ -1,23 +1,25 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
+  <div id="gravemap">
+    <gr-navbar/>
     <router-view/>
+    <gr-footer/>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app',
-};
+  import GrFooter from '@/components/Footer';
+  import GrNavbar from '@/components/Navbar';
+
+  export default {
+    name: 'gravemap',
+    components: { GrFooter, GrNavbar },
+  };
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  @import '~bulma/css/bulma.css';
+  @import '~buefy/lib/buefy.css';
+  
+  @import "~leaflet/dist/leaflet.css";
+
 </style>

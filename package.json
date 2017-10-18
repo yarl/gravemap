@@ -14,8 +14,13 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "axios": "^0.16.2",
+    "buefy": "^0.5.4",
+    "bulma": "^0.6.0",
+    "leaflet": "^1.2.0",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue2-leaflet": "0.0.55"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
