@@ -2,40 +2,19 @@
   <nav class="navbar has-shadow">
     <div class="container">
       <div class="navbar-brand">
-        <a class="navbar-item" href="../">
+        <router-link class="navbar-item" to="/">
           Logo
-        </a>
-
-        <div class="navbar-burger burger" data-target="navMenu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+        </router-link>
       </div>
 
-      <div id="navMenu" class="navbar-menu">
+      <div class="navbar-menu">
         <div class="navbar-end">
-          <div class="navbar-item has-dropdown">
-            <a class="navbar-link">
-              Account
-            </a>
-
-            <div class="navbar-dropdown" v-if="false">
-              <a class="navbar-item">
-                Dashboard
-              </a>
-              <a class="navbar-item">
-                Profile
-              </a>
-              <a class="navbar-item">
-                Settings
-              </a>
-              <hr class="navbar-divider">
-              <div class="navbar-item">
-                Logout
-              </div>
-            </div>
-          </div>
+          <router-link class="navbar-item" to="/home">
+            Home
+          </router-link>
+          <router-link class="navbar-item" to="/about">
+            About
+          </router-link>
         </div>
       </div>
     </div>
