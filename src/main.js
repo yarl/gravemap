@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Vue2Leaflet from 'vue2-leaflet';
+import VueMoment from 'vue-moment';
 import Buefy from 'buefy';
 
 import About from '@/views/About';
@@ -12,6 +13,7 @@ Vue.config.productionTip = false;
 
 Vue.use(Buefy);
 Vue.use(Router);
+Vue.use(VueMoment);
 
 Vue.component('v-map', Vue2Leaflet.Map);
 Vue.component('v-tilelayer', Vue2Leaflet.TileLayer);
