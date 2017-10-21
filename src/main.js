@@ -4,7 +4,6 @@ import Vue2Leaflet from 'vue2-leaflet';
 import Buefy from 'buefy';
 
 import About from '@/views/About';
-import Home from '@/views/Home';
 import Map from '@/views/Map';
 
 import App from './App';
@@ -23,9 +22,10 @@ new Vue({
   el: '#app',
   router: new Router({
     routes: [
-      { path: '/', name: 'Map', component: Map },
+      { path: '/', redirect: '/map/@38.88,-77.031,14z' },
+      { path: '/map', redirect: '/map/@38.88,-77.031,14z' },
+      { path: '/map/:position', name: 'Map', component: Map },
       { path: '/about', name: 'About', component: About },
-      { path: '/home', name: 'Home', component: Home },
     ],
   }),
   template: '<App/>',

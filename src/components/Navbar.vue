@@ -9,9 +9,6 @@
 
       <div class="navbar-menu">
         <div class="navbar-end">
-          <router-link class="navbar-item" to="/home">
-            Home
-          </router-link>
           <router-link class="navbar-item" to="/about">
             About
           </router-link>

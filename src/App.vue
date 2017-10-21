@@ -2,7 +2,7 @@
   <div id="gravemap">
     <gr-navbar/>
     <router-view/>
-    <gr-footer/>
+    <!-- <gr-footer/> -->
   </div>
 </template>
 
