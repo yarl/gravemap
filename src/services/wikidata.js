@@ -7,6 +7,9 @@ export default class wikidata {
     this.sparqlUrl = 'https://query.wikidata.org/sparql';
   }
 
+  /**
+   *
+   */
   runQuery(query) {
     return Axios.get(this.sparqlUrl, {
       params: { query },

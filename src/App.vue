@@ -19,7 +19,7 @@
 <style>
   @import '~bulma/css/bulma.css';
   @import '~buefy/lib/buefy.css';
-  
+
   @import "~leaflet/dist/leaflet.css";
   @import "~flex-layout-attribute/css/flex-layout-attribute.css";
 </style>
