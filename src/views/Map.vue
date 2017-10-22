@@ -29,7 +29,8 @@
   import PersonList from '@/components/PersonList';
   import Wikidata from '@/services/wikidata';
 
-  import iconUrl from '@/assets/marker.png';
+  import redIcon from '@/assets/marker_red.png';
+  import greenIcon from '@/assets/marker_green.png';
 
   let map = null;
   let popup = null;
@@ -55,10 +56,10 @@
       });
   }
 
-  function getIcon() {
+  function getIcon(point) {
     const Icon = L.Icon.extend({
       options: {
-        iconUrl,
+        iconUrl: point.graveImage ? greenIcon : redIcon,
         iconSize: [12, 12],
         iconAnchor: [6, 6],
       },
