@@ -135,12 +135,12 @@
     getData
       .apply(this, [query])
       .then((data) => {
-        this.graves = [];
-        setTimeout(() => {
-          this.graves = data
-            .map(grave => new Grave(grave));
-          console.info('Graves loaded:', this.graves);
-        });
+        this.graves = data
+          .filter(
+            (element, index, array) =>
+            array.findIndex(t => t.person.value === element.person.value) === index)
+          .map(grave => new Grave(grave));
+        console.info('Graves loaded:', this.graves);
       });
   }
 
