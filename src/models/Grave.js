@@ -63,4 +63,15 @@ export default class Grave {
       120,
     ].join('');
   }
+
+  get graveImageURL() {
+    if (!this.graveImage) { return null; }
+    return [
+      '//commons.wikimedia.org/w/index.php?title=',
+      'Special:Redirect/file/',
+      encodeURIComponent(this.graveImage),
+      '&width=',
+      640,
+    ].join('');
+  }
 }
