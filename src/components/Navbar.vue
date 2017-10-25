@@ -1,9 +1,9 @@
 <template>
   <nav class="navbar has-shadow">
-    <div class="container">
+    <div class="container is-fluid">
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/">
-          Logo
+          <strong>graves.wiki</strong>
         </router-link>
       </div>
 
@@ -28,4 +28,7 @@ export default {
 </script>
 
 <style scoped>
+  .navbar {
+    z-index: 1000;
+  }
 </style>
