@@ -1,16 +1,26 @@
 <template>
   <section class="section">
     <div class="container">
-      <h1 class="title">Section</h1>
+      <h1 class="title">About</h1>
       <h2 class="subtitle">
-        A simple container to divide your page into <strong>sections</strong>, like the one you're currently reading
+        This web application is using Wikidata data using SPARQL query listed below. You can find source code <a href="http://github.com/yarl/gravemap">on GitHub</a>.
       </h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </p>
-      <p>
-        <a href="http://github.com/yarl/gravemap">github.com/yarl/gravemap</a>
-      </p>
+      <code>SELECT ?person ?personLabel ?personDescription ?coord ?graveImage ?image ?birthDate ?deathDate
+  WHERE {
+    SERVICE wikibase:box {
+      ?statement pq:P625 ?coord.
+      bd:serviceParam wikibase:cornerWest &lt;coordinates&gt;.
+      bd:serviceParam wikibase:cornerEast &lt;coordinates&gt;.
+    }
+    ?person p:P119 ?statement; wdt:P31 wd:Q5.
+    OPTIONAL { ?person wdt:P1442 ?graveImage }
+    OPTIONAL { ?person wdt:P18 ?image }
+    OPTIONAL { ?person wdt:P569 ?birthDate }
+    OPTIONAL { ?person wdt:P570 ?deathDate }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+  }
+  ORDER BY ?personLabel
+</code>
     </div>
   </section>
 </template>
@@ -27,5 +37,8 @@ export default {
 <style scoped>
   p {
     margin-bottom: .5rem;
+  }
+  code {
+    white-space: pre;
   }
 </style>
