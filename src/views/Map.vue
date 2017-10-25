@@ -11,8 +11,9 @@
           :options="point"
           :lat-lng="point.coordinates"
           :icon="getIcon(point)"
-          v-on:l-mouseover="showPopup(point)"
-          v-on:l-mouseout="closePopup(point)"
+          @l-mouseover="showPopup(point)"
+          @l-mouseout="closePopup(point)"
+          @l-click="showModal(point)"
         />
       </v-map>
       <!-- <b-loading :active.sync="isLoading" :canCancel="false"></b-loading> -->
@@ -20,15 +21,63 @@
     <div class="column is-narrow">
       <gr-person-list :persons="graves"></gr-person-list>
     </div>
+    <section>
+      <b-modal :active.sync="isModal" :width="640">
+        <div class="card" v-if="modalPerson">
+          <div class="card-image">
+            <figure class="image is-4by3">
+              <h2 class="title"
+                  v-if="!modalPerson.graveImageURL">
+                Grave photo is missing
+              </h2>
+              <img :src="modalPerson.graveImageURL"
+                  v-if="modalPerson.graveImageURL"
+                  alt="Image">
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <a class="image is-48x48" layout="row center-center"
+                      v-if="modalPerson.imageURL"
+                      :href="`//commons.wikimedia.org/wiki/File:${modalPerson.image}`"
+                      target="_blank">
+                    <img :src="modalPerson.imageURL" alt="Image">
+                  </a>
+                </figure>
+              </div>
+              <div class="media-content">
+                <div layout="row center-justify">
+                  <p class="title is-4">{{ modalPerson.name.value }}</p>
+                  <a class="wikidata-link"
+                      :href="`//www.wikidata.org/wiki/${modalPerson.id}`"
+                      target="_blank">
+                    <b-icon icon="link"></b-icon>
+                  </a>
+                </div>
+                <p class="subtitle is-6">({{ modalPerson.birthDate | moment("YYYY") }}–{{ modalPerson.deathDate | moment("YYYY") }})</p>
+              </div>
+            </div>
+
+            <div class="content">
+              {{ modalPerson.description && modalPerson.description.value }}
+            </div>
+          </div>
+        </div>
+      </b-modal>
+    </section>
   </div>
 </template>
 
 <script>
   import L from 'leaflet';
+
   import Grave from '@/models/Grave';
   import PersonList from '@/components/PersonList';
   import Wikidata from '@/services/wikidata';
 
+  import store from '@/store';
   import redIcon from '@/assets/marker_red.png';
   import greenIcon from '@/assets/marker_green.png';
 
@@ -42,15 +91,15 @@
    * Gets data from SPARQL endpoint
    */
   function getData(query) {
-    this.isLoading = true;
+    store.commit('load');
     return wikidata
       .runQuery(query)
       .then((response) => {
-        this.isLoading = false;
+        store.commit('unload');
         return response.data.results.bindings;
       })
       .catch((err) => {
-        this.isLoading = false;
+        store.commit('unload');
         console.error('Error getting data from SPARQL endpoint!', err);
         return [];
       });
@@ -96,11 +145,9 @@
    * Updates URL based on map state
    */
   function updateURL() {
-    const params = [
-      map.getCenter().lat,
-      map.getCenter().lng,
-      `${map.getZoom()}z`,
-    ];
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+    const params = [center.lat.toFixed(6), center.lng.toFixed(6), `${zoom}z`];
 
     router.push({
       name: 'Map',
@@ -165,6 +212,11 @@
     if (popupTimeout) { clearTimeout(popupTimeout); }
   }
 
+  function showModal(point) {
+    store.commit('setSelectedPerson', point);
+    store.commit('showModal');
+  }
+
   export default {
     components: {
       'gr-person-list': PersonList,
@@ -172,10 +224,17 @@
     data() {
       return {
         graves: [],
-        isLoading: false,
       };
     },
-    methods: { getIcon, mapMoved, showPopup, closePopup, initMapPosition },
+    computed: {
+      isLoading() { return store.state.isLoading; },
+      isModal: {
+        get: () => store.state.isModal,
+        set: value => store.commit('setModal', value),
+      },
+      modalPerson() { return store.state.selectedPerson; },
+    },
+    methods: { getIcon, mapMoved, showPopup, closePopup, showModal, initMapPosition },
     mounted: function mounted() {
       map = this.$refs.map.mapObject;
       router = this.$router;
@@ -192,5 +251,30 @@
   .map-container {
     height: calc(100vh - 52px);
     padding-bottom: 0;
+  }
+
+
+  .modal.is-active {
+    z-index: 1000;
+    cursor: auto;
+  }
+  .modal .image {
+    background: #ccc;
+  }
+  .modal .image .title {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    opacity: .75;
+  }
+  .modal .image img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+  }
+  .modal .card .title.is-4 {
+    margin-bottom: 0;
   }
 </style>
