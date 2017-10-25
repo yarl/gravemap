@@ -30,9 +30,11 @@
                   v-if="!modalPerson.graveImageURL">
                 Grave photo is missing
               </h2>
-              <img :src="modalPerson.graveImageURL"
-                  v-if="modalPerson.graveImageURL"
-                  alt="Image">
+              <a v-if="modalPerson.graveImageURL"
+                  :href="`//commons.wikimedia.org/wiki/File:${modalPerson.graveImage}`"
+                  target="_blank">
+                <img :src="modalPerson.graveImageURL" alt="Image">
+              </a>
             </figure>
           </div>
           <div class="card-content">
