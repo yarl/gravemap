@@ -24,8 +24,8 @@ new Vue({
   el: '#app',
   router: new Router({
     routes: [
-      { path: '/', redirect: '/map/@38.88,-77.031,14z' },
-      { path: '/map', redirect: '/map/@38.88,-77.031,14z' },
+      { path: '/', redirect: '/map/@40.401724,-3.728957,16z' },
+      { path: '/map', redirect: '/map/@40.401724,-3.728957,16z' },
       { path: '/map/:position', name: 'Map', component: Map },
       { path: '/about', name: 'About', component: About },
     ],
