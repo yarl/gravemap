@@ -23,6 +23,7 @@
     "vue-moment": "^2.1.0",
     "vue-router": "^3.0.1",
     "vue2-leaflet": "^0.0.56",
+    "vue2-leaflet-markercluster": "^1.2.0",
     "vuex": "^3.0.0"
   },
   "devDependencies": {

@@ -6,15 +6,17 @@
           :center="[38.8817, -77.0706]"
           @l-moveend="mapMoved">
         <v-tilelayer url="http://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"></v-tilelayer>
-        <v-marker v-for="point in graves"
-          :key="point.id"
-          :options="point"
-          :lat-lng="point.coordinates"
-          :icon="getIcon(point)"
-          @l-mouseover="showPopup(point)"
-          @l-mouseout="closePopup(point)"
-          @l-click="showModal(point)"
-        />
+        <v-marker-cluster>
+          <v-marker v-for="point in graves"
+            :key="point.id"
+            :options="point"
+            :lat-lng="point.coordinates"
+            :icon="getIcon(point)"
+            @l-mouseover="showPopup(point)"
+            @l-mouseout="closePopup(point)"
+            @l-click="showModal(point)"
+          />
+        </v-marker-cluster>
       </v-map>
       <!-- <b-loading :active.sync="isLoading" :canCancel="false"></b-loading> -->
     </div>
