@@ -6,17 +6,21 @@
     </div>
     <div class="panel-header" v-if="isLoading">Loading...</div>
     <div class="panel-list">
-      <gr-person-panel
-        v-for="person in persons"
-        :key="person.id"
-        :person="person">
-      </gr-person-panel>
+      <vue-virtual-scroll :height="80" style="height: 100%">
+        <gr-person-panel
+          v-for="person in persons"
+          :key="person.id"
+          :person="person">
+        </gr-person-panel>
+      </vue-virtual-scroll>
       <b-loading :active.sync="isLoading"></b-loading>
     </div>
   </nav>
 </template>
 
 <script>
+  import VueVirtualScroll from 'vue-virtualscroll';
+
   import PersonPanel from '@/components/PersonPanel';
 
   import store from '@/store';
@@ -24,6 +28,7 @@
   export default {
     components: {
       'gr-person-panel': PersonPanel,
+      'vue-virtual-scroll': VueVirtualScroll,
     },
     props: ['persons'],
     computed: {
@@ -34,6 +39,7 @@
 
 <style scoped>
   .panel {
+    position: relative;
     width: 400px;
     height: calc(100vh - 52px);
     overflow: auto;
@@ -49,6 +55,7 @@
 
   .panel-list {
     position: relative;
+    height: calc(100% - 58px);
   }
 
   .loading-overlay.is-active {
