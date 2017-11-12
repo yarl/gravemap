@@ -6,7 +6,7 @@
           :center="[38.8817, -77.0706]"
           @l-moveend="mapMoved">
         <v-tilelayer url="http://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"></v-tilelayer>
-        <v-marker-cluster>
+        <v-marker-cluster :options="clusterOptions">
           <v-marker v-for="point in graves"
             :key="point.id"
             :options="point"
@@ -200,7 +200,7 @@
    */
   function showPopup(point) {
     popupTimeout = setTimeout(() => {
-      popup = this.$refs.map.$children
+      popup = this.$refs.map.$children[1].$children
         .filter(element => element.mapObject.options.id === point.id)
         .pop()
         .mapObject;
@@ -228,6 +228,7 @@
     data() {
       return {
         graves: [],
+        clusterOptions: { disableClusteringAtZoom: 18 },
       };
     },
     computed: {
