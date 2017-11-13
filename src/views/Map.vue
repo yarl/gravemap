@@ -94,13 +94,17 @@
   /**
    * Gets data from SPARQL endpoint
    */
-  function getData(query) {
+  function getData(queryPeople, queryGraves) {
     store.commit('load');
+
     return wikidata
-      .runQuery(query)
+      .runQueries([queryPeople, queryGraves])
       .then((response) => {
         store.commit('unload');
-        return response.data.results.bindings;
+
+        const responses = [];
+        response.forEach(resp => responses.push(...resp.data.results.bindings));
+        return responses;
       })
       .catch((err) => {
         store.commit('unload');
@@ -121,22 +125,47 @@
   }
 
   /**
-   * Computes SPARQL query based on map corners
+   * Returns coordinates for SERVICE wikibase:box
    */
-  function getQuery() {
+  function getBBox() {
     const bbox = map.getBounds();
     const cornerWest = `"Point(${bbox.getSouthWest().lng} ${bbox.getSouthWest().lat})"^^geo:wktLiteral`;
     const cornerEast = `"Point(${bbox.getNorthEast().lng} ${bbox.getNorthEast().lat})"^^geo:wktLiteral`;
 
+    return `
+      bd:serviceParam wikibase:cornerWest ${cornerWest}.
+      bd:serviceParam wikibase:cornerEast ${cornerEast}.`;
+  }
+
+  /**
+   * Computes SPARQL query for people with P119 statements
+   */
+  function getQuery() {
     return `SELECT ?person ?personLabel ?personDescription ?coord ?graveImage ?image ?birthDate ?deathDate
       WHERE {
         SERVICE wikibase:box {
-          ?statement pq:P625 ?coord.
-          bd:serviceParam wikibase:cornerWest ${cornerWest}.
-          bd:serviceParam wikibase:cornerEast ${cornerEast}.
+          ?statement pq:P625 ?coord. ${getBBox()}
         }
         ?person p:P119 ?statement; wdt:P31 wd:Q5.
         OPTIONAL { ?person wdt:P1442 ?graveImage }
+        OPTIONAL { ?person wdt:P18 ?image }
+        OPTIONAL { ?person wdt:P569 ?birthDate }
+        OPTIONAL { ?person wdt:P570 ?deathDate }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+      }
+      ORDER BY ?personLabel`;
+  }
+
+  function getQueryGraves() {
+    return `SELECT ?person ?personLabel ?personDescription ?coord ?graveImage ?image ?birthDate ?deathDate
+      WHERE {
+        SERVICE wikibase:box {
+          ?grave wdt:P625 ?coord. ${getBBox()}
+        }
+        ?grave wdt:P31 wd:Q173387.
+        ?grave p:P31 ?instance.
+        ?instance pq:P642 ?person.
+        OPTIONAL { ?grave wdt:P18 ?graveImage }
         OPTIONAL { ?person wdt:P18 ?image }
         OPTIONAL { ?person wdt:P569 ?birthDate }
         OPTIONAL { ?person wdt:P570 ?deathDate }
@@ -178,13 +207,14 @@
    * Action fired after map move
    */
   function mapMoved() {
-    const query = getQuery();
+    const queryPeople = getQuery();
+    const queryGraves = getQueryGraves();
 
     updateURL();
     if (map.getZoom() < 10) { return; }
 
     getData
-      .apply(this, [query])
+      .apply(this, [queryPeople, queryGraves])
       .then((data) => {
         this.graves = data
           .filter(

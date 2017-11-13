@@ -15,4 +15,11 @@ export default class wikidata {
       params: { query },
     });
   }
+
+  runQueries(queries) {
+    return Axios.all(queries
+      .map(query => Axios.get(this.sparqlUrl, {
+        params: { query },
+      })));
+  }
 }
