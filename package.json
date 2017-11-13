@@ -17,6 +17,7 @@
     "axios": "^0.16.2",
     "buefy": "^0.5.4",
     "bulma": "^0.6.0",
+    "debounce": "^1.1.0",
     "flex-layout-attribute": "^1.0.3",
     "leaflet": "^1.2.0",
     "vue": "^2.5.2",
