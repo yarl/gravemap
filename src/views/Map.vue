@@ -174,26 +174,30 @@
       ORDER BY ?personLabel`;
   }
 
+  function getMapPosition() {
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+    const params = [center.lat.toFixed(5), center.lng.toFixed(5), `${zoom}z`];
+
+    return `@${params.join(',')}`;
+  }
+
   /**
    * Updates URL based on map state
    */
   function updateURL() {
-    const center = map.getCenter();
-    const zoom = map.getZoom();
-    const params = [center.lat.toFixed(6), center.lng.toFixed(6), `${zoom}z`];
-
     router.push({
       name: 'Map',
-      params: { position: `@${params.join(',')}` },
+      params: { position: getMapPosition() },
     });
   }
 
   /**
    * Sets map position based on URL address
    */
-  function initMapPosition() {
+  function initMapPosition(position) {
     try {
-      const [lat, lng, zoom] = this.$route.params.position
+      const [lat, lng, zoom] = (position || this.$route.params.position)
         .slice(1, -1)
         .split(',')
         .map(value => parseFloat(value));
@@ -269,12 +273,22 @@
       },
       modalPerson() { return store.state.selectedPerson; },
     },
-    methods: { getIcon, mapMoved, showPopup, closePopup, showModal, initMapPosition },
+    methods: { getIcon, getMapPosition, mapMoved, showPopup, closePopup, showModal, initMapPosition },
     mounted: function mounted() {
       map = this.$refs.map.mapObject;
       router = this.$router;
 
       this.initMapPosition();
+    },
+    beforeRouteUpdate(to, from, next) {
+      const urlPosition = to.params.position;
+      const mapPosition = this.getMapPosition();
+
+      if (urlPosition !== mapPosition) {
+        this.initMapPosition(to.params.position);
+      }
+
+      next();
     },
   };
 </script>
