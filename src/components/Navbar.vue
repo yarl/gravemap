@@ -7,29 +7,27 @@
         </router-link>
       </div>
       <div class="navbar-brand">
-        <b-field>
-          <b-autocomplete
-              placeholder="Search"
-              field="title"
-              v-model="name"
-              :data="data"
-              :loading="isFetching"
-              @input="getAsyncData"
-              @select="option => selected = option">
+        <b-autocomplete
+            placeholder="Search"
+            field="title"
+            v-model="name"
+            :data="data"
+            :loading="isFetching"
+            @input="getAsyncData"
+            @select="setPlace">
 
-            <template slot-scope="props">
-              <div class="media">
-                <div class="media-content">
-                  {{ props.option.display_name }}
-                  <br>
-                  <small>
-                    type {{ props.option.type }}
-                  </small>
-                </div>
+          <template slot-scope="props">
+            <div class="media">
+              <div class="media-content">
+                {{ props.option.display_name }}
+                <br>
+                <small>
+                  {{ props.option.type }}
+                </small>
               </div>
-            </template>
-          </b-autocomplete>
-        </b-field>
+            </div>
+          </template>
+        </b-autocomplete>
       </div>
 
       <div class="navbar-menu">
@@ -48,9 +46,10 @@
 
   import Osm from '@/services/osm';
 
+  let router = null;
   const OSM = new Osm();
 
-  function getMovies() {
+  function getPlaces() {
     this.data = [];
     this.isFetching = true;
 
@@ -65,7 +64,17 @@
       });
   }
 
-  const getAsyncData = debounce(getMovies, 500);
+  function setPlace(place) {
+    if (place) {
+      const params = [place.lat, place.lon, '15z'];
+      router.push({
+        name: 'Map',
+        params: { position: `@${params.join(',')}` },
+      });
+    }
+  }
+
+  const getAsyncData = debounce(getPlaces, 500);
 
   export default {
     data() {
@@ -76,12 +85,18 @@
         isFetching: false,
       };
     },
-    methods: { getAsyncData },
+    methods: { getAsyncData, setPlace },
+    mounted: function mounted() {
+      router = this.$router;
+    },
   };
 </script>
 
 <style scoped>
   .navbar {
     z-index: 1000;
+  }
+  .autocomplete {
+    margin: 8px;
   }
 </style>
