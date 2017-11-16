@@ -8,7 +8,7 @@
       </div>
       <div class="navbar-brand">
         <b-autocomplete
-            placeholder="Search"
+            placeholder="Search Town or City"
             field="title"
             v-model="name"
             :data="data"
