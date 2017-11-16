@@ -262,7 +262,39 @@
     data() {
       return {
         graves: [],
-        clusterOptions: { disableClusteringAtZoom: 18 },
+        clusterOptions: {
+          showCoverageOnHover: false,
+          zoomToBoundsOnClick: true,
+          maxClusterRadius: zoom => 130 - (zoom * 5),
+          animate: false,
+          iconCreateFunction: (cluster) => {
+            const all = cluster.getChildCount();
+            const green = cluster
+              .getAllChildMarkers()
+              .filter(g => g.options.graveImage)
+              .length;
+            const percentage = green / all;
+
+            const size = Math.min(80, 20 + all);
+            const radius = (size - 5) / 4.0;
+            const circuit = 2 * 3.14 * radius;
+
+            const props = {
+              className: 'marker-cluster',
+              html: `<div>
+                <span class="chart-count">${all}</span>
+                <svg class="chart" width="${size}" height="${size}">
+                  <circle class="chart-slice"
+                    style="stroke-dasharray: ${circuit * percentage}, ${circuit}; stroke-width: ${(2 * radius) + 1};"
+                    r="${radius}" cx="${(size / 2.0) - 2}" cy="${(size / 2.0) - 2}">
+                  </circle>
+                </svg>
+              </div>`,
+              iconSize: new L.Point(size, size),
+            };
+            return new L.DivIcon(props);
+          },
+        },
       };
     },
     computed: {
@@ -301,7 +333,6 @@
     height: calc(100vh - 52px);
     padding-bottom: 0;
   }
-
 
   .modal.is-active {
     z-index: 1000;
