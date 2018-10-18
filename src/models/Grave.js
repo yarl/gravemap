@@ -9,6 +9,7 @@ export default class Grave {
   description;
   birthDate;
   deathDate;
+  graveyard;
 
   constructor(grave) {
     this.id = grave.person.value
@@ -42,6 +43,14 @@ export default class Grave {
       this.name = {
         value: grave.personLabel.value,
         lang: grave.personLabel['xml:lang'],
+      };
+    } catch (err) { /* safely ignore */ }
+
+    try {
+      this.graveyard = {
+        url: grave.graveyard.value,
+        value: grave.graveyardLabel.value,
+        lang: grave.graveyardLabel['xml:lang'],
       };
     } catch (err) { /* safely ignore */ }
 

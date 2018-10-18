@@ -40,6 +40,13 @@
             </figure>
           </div>
           <div class="card-content">
+            <p class="graveyard-info"
+                  v-if="modalPerson.graveyard && modalPerson.graveyard.value">
+                <a :href="modalPerson.graveyard.url"
+                    target="_blank">
+                  {{ modalPerson.graveyard.value }}
+                </a>
+            </p>
             <div class="media">
               <div class="media-left">
                 <figure class="image is-48x48">
@@ -147,12 +154,13 @@
    * Computes SPARQL query for people with P119 statements
    */
   function getQuery() {
-    return `SELECT ?person ?personLabel ?personDescription ?coord ?graveImage ?image ?birthDate ?deathDate
+    return `SELECT ?person ?personLabel ?personDescription ?graveyard ?graveyardLabel ?coord ?graveImage ?image ?birthDate ?deathDate
       WHERE {
         SERVICE wikibase:box {
           ?statement pq:P625 ?coord. ${getBBox()}
         }
         ?person p:P119 ?statement; wdt:P31 wd:Q5.
+        ?person wdt:P119 ?graveyard.
         OPTIONAL { ?person wdt:P1442 ?graveImage }
         OPTIONAL { ?person wdt:P18 ?image }
         OPTIONAL { ?person wdt:P569 ?birthDate }
@@ -231,7 +239,7 @@
             (element, index, array) =>
             array.findIndex(t => t.person.value === element.person.value) === index)
           .map(grave => new Grave(grave));
-        console.info('Graves loaded:', this.graves);
+        // console.info('Graves loaded:', this.graves);
       });
   }
 
@@ -359,6 +367,10 @@
     max-width: 100%;
     max-height: 100%;
     margin: auto;
+  }
+  .modal .card .graveyard-info {
+    margin-left: 64px;
+    margin-bottom: 5px;
   }
   .modal .card .title.is-4 {
     margin-bottom: 0;
