@@ -15,6 +15,8 @@
         <div class="media-content">
           <div class="content">
             <p>
+              <img v-if="person.graveImage" :src="icons.greenIcon" alt="Grave image present">
+              <img v-else :src="icons.redIcon" alt="Grave image missing">
               <a class="wikidata-link"
                   :href="`//www.wikidata.org/wiki/${person.id}`"
                   target="_blank">
@@ -40,6 +42,8 @@
 
 <script>
   import store from '@/store';
+  import redIcon from '@/assets/marker_red.png';
+  import greenIcon from '@/assets/marker_green.png';
 
   function showModal() {
     console.log(this.person);
@@ -48,6 +52,11 @@
   }
 
   export default {
+    data() {
+      return {
+        icons: { redIcon, greenIcon },
+      };
+    },
     props: ['person'],
     methods: { showModal },
   };
@@ -55,11 +64,15 @@
 
 <style scoped>
   .panel-block {
+    position: relative;
     border-left: 0;
     border-right: 0;
   }
   .panel-block:first-child {
     border-top: 0;
+  }
+  .panel-block:hover .wikidata-link {
+    display: inline;
   }
   .image {
     background: #ccc;
@@ -78,6 +91,15 @@
     margin: auto;
   }
   .wikidata-link {
-    vertical-align: text-bottom;
+    display: none;
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background: whitesmoke;
+    border-radius: 50%;
+    line-height: 27px;
+    text-align: center;
   }
 </style>
