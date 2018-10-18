@@ -1,6 +1,6 @@
 {
   "name": "gravemap",
-  "version": "0.0.0",
+  "version": "18.10.01",
   "description": "Map of graves based on Wikidata",
   "author": "Paweł Marynowski <kontakt@yarlu.pl>",
   "private": true,
