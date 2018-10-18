@@ -60,7 +60,13 @@
                     <b-icon icon="link"></b-icon>
                   </a>
                 </div>
-                <p class="subtitle is-6">({{ modalPerson.birthDate | moment("YYYY") }}–{{ modalPerson.deathDate | moment("YYYY") }})</p>
+                <p class="subtitle is-6">
+                  (<span v-if="modalPerson.birthDate">{{ modalPerson.birthDate | moment("YYYY") }}</span>
+                  <span v-else>?</span>
+                  –
+                  <span v-if="modalPerson.deathDate">{{ modalPerson.deathDate | moment("YYYY") }}</span>
+                  <span v-else>?</span>)
+                </p>
               </div>
             </div>
 

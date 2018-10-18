@@ -21,8 +21,14 @@
                 <b-icon icon="link"></b-icon>
               </a>
               <strong>{{ person.name.value }}</strong>
-              <small>({{ person.birthDate | moment("YYYY") }}–{{ person.deathDate | moment("YYYY") }})</small>
-              <br>
+              <small>
+                (<span v-if="person.birthDate">{{ person.birthDate | moment("YYYY") }}</span>
+                <span v-else>?</span>
+                –
+                <span v-if="person.deathDate">{{ person.deathDate | moment("YYYY") }}</span>
+                <span v-else>?</span>)
+              </small>
+              <br />
               {{ person.description && person.description.value }}
             </p>
           </div>
