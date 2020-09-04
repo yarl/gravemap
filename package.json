@@ -21,7 +21,7 @@
     "flex-layout-attribute": "^1.0.3",
     "leaflet": "^1.2.0",
     "vue": "^2.5.2",
-    "vue-moment": "^2.1.0",
+    "vue-moment": "^4.1.0",
     "vue-router": "^3.0.1",
     "vue-virtualscroll": "^1.0.0",
     "vue2-leaflet": "^0.0.56",
